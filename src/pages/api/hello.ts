@@ -1,16 +1,14 @@
-import type { NextApiHandler } from "next";
-
 type Data = {
   name: string;
 };
 
-const handler: NextApiHandler<Data> = (req, res) => {
+const handler: import("next").NextApiHandler<Data> = (req, res) => {
   switch (req.method) {
     case "GET":
       res.status(200).json({ name: "John Doe" });
-      break;
+      return;
     default:
-      return res.status(405).end();
+      res.status(405).end();
   }
 };
 

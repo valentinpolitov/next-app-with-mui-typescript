@@ -1,5 +1,5 @@
 import createCache from "@emotion/cache";
 
-export default function createEmotionCache() {
-  return createCache({ key: "css" });
-}
+const createEmotionCache = (options: import("@emotion/cache").Options = { key: "css" }) => createCache(options);
+
+export default createEmotionCache;

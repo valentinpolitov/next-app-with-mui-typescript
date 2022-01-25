@@ -1,22 +1,22 @@
-import * as React from "react";
-import clsx from "clsx";
+import { forwardRef } from "react";
 import { useRouter } from "next/router";
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
+import NextLink from "next/link";
+import MuiLink from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
 import { isUriScheme } from "./utils";
+import clsx from "clsx";
 
 const Anchor = styled("a")({});
 
 interface NextLinkComposedProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">,
-    Omit<NextLinkProps, "href" | "as"> {
-  to: NextLinkProps["href"];
-  linkAs?: NextLinkProps["as"];
-  href?: NextLinkProps["href"];
+    Omit<import("next/link").LinkProps, "href" | "as"> {
+  to: import("next/link").LinkProps["href"];
+  linkAs?: import("next/link").LinkProps["as"];
+  href?: import("next/link").LinkProps["href"];
 }
 
-export const NextLinkComposed = React.forwardRef<
+export const NextLinkComposed = forwardRef<
   HTMLAnchorElement,
   NextLinkComposedProps
 >(function NextLinkComposed(props, ref) {
@@ -53,15 +53,15 @@ export const NextLinkComposed = React.forwardRef<
 
 export type LinkProps = {
   activeClassName?: string;
-  as?: NextLinkProps["as"];
-  href: NextLinkProps["href"];
+  as?: import("next/link").LinkProps["as"];
+  href: import("next/link").LinkProps["href"];
   noLinkStyle?: boolean;
 } & Omit<NextLinkComposedProps, "to" | "linkAs" | "href"> &
-  Omit<MuiLinkProps, "href" | "children">;
+  Omit<import("@mui/material/Link").LinkProps, "href" | "children">;
 
 // A styled version of the Next.js Link component:
 // https://nextjs.org/docs/#with-link
-const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
+const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   props,
   ref
 ) {
@@ -76,6 +76,8 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     ...other
   } = props;
 
+  const ExternalLink = noLinkStyle ? Anchor : MuiLink;
+
   const router = useRouter();
   const pathname = typeof href === "string" ? href : href.pathname;
   const className = clsx(classNameProps, {
@@ -85,20 +87,14 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   const isExternal = typeof href === "string" && isUriScheme(href);
 
   return isExternal ? (
-    noLinkStyle ? (
-      <Anchor className={className} href={href} ref={ref} {...other}>
-        {children}
-      </Anchor>
-    ) : (
-      <MuiLink className={className} href={href} ref={ref} {...other}>
-        {children}
-      </MuiLink>
-    )
+    <ExternalLink className={className} href={href} ref={ref} {...other}>
+      {children}
+    </ExternalLink>
   ) : (
     <MuiLink
       component={NextLinkComposed}
-      linkAs={linkAs}
       className={className}
+      linkAs={linkAs}
       ref={ref}
       to={href}
       {...other}
