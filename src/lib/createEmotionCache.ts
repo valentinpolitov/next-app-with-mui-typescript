@@ -1,7 +1,7 @@
 import createCache from "@emotion/cache";
 
 const createEmotionCache = (
-  options: import("@emotion/cache").Options = { key: "css" }
-) => createCache(options);
+  options?: Partial<import("@emotion/cache").Options>
+) => createCache({ key: "css", prepend: true, ...options });
 
 export default createEmotionCache;

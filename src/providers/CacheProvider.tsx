@@ -3,10 +3,14 @@ import createEmotionCache from "@/lib/createEmotionCache";
 
 const clientSideEmotionCache = createEmotionCache();
 
-const CacheProvider: React.FC<{
+export interface CacheProviderProps {
+  children?: React.ReactNode;
   cache?: import("@emotion/cache").EmotionCache;
-}> = ({ children, cache = clientSideEmotionCache }) => (
-  <EmotionCacheProvider value={cache}>{children}</EmotionCacheProvider>
-);
+}
+
+const CacheProvider: React.FC<CacheProviderProps> = ({
+  children,
+  cache = clientSideEmotionCache,
+}) => <EmotionCacheProvider value={cache}>{children}</EmotionCacheProvider>;
 
 export default CacheProvider;

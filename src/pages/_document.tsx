@@ -2,20 +2,22 @@ import * as React from "react";
 import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import { theme, createEmotionCache } from "@/lib";
+import { googleFontsUrl } from "@/lib/utils/fonts";
 
-export default class Document extends NextDocument {
+type DocumentInitialProps = import("next/document").DocumentInitialProps & {
+  emotionStyleTags: JSX.Element[];
+};
+
+export default class Document extends NextDocument<DocumentInitialProps> {
   render() {
     return (
       <Html lang="en">
         <Head>
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          />
+          <link rel="stylesheet" href={googleFontsUrl} />
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
-          {(this.props as any).emotionStyleTags}
+          {this.props.emotionStyleTags}
         </Head>
         <body>
           <Main />
@@ -53,8 +55,10 @@ Document.getInitialProps = async (ctx) => {
     />
   ));
 
-  return {
+  const documentInitialProps: DocumentInitialProps = {
     ...initialProps,
     emotionStyleTags,
   };
+
+  return documentInitialProps;
 };

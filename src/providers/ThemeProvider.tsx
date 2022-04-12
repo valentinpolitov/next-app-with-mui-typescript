@@ -1,7 +1,11 @@
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import theme from "@/lib/theme";
 
-const ThemeProvider: React.FC = ({ children }) => (
+export interface ThemeProviderProps {
+  children?: React.ReactNode;
+}
+
+const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => (
   <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
 );
 

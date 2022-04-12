@@ -8,20 +8,20 @@ interface AppProps extends NextAppProps {
   emotionCache?: import("@emotion/cache").EmotionCache;
 }
 
-export default function App(props: AppProps) {
-  const { Component, emotionCache, pageProps } = props;
-  return (
-    <CacheProvider cache={emotionCache}>
-      <Head>
-        <meta
-          name="viewport"
-          content="initial-scale=1.0, minimum-scale=1.0, width=device-width, viewport-fit=cover"
-        />
-      </Head>
-      <ThemeProvider>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CacheProvider>
-  );
-}
+const App: React.FC<AppProps> = ({ Component, emotionCache, pageProps }) => (
+  <CacheProvider cache={emotionCache}>
+    <Head>
+      <meta
+        name="viewport"
+        content="initial-scale=1.0, minimum-scale=1.0, width=device-width, viewport-fit=cover"
+      />
+    </Head>
+
+    <ThemeProvider>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ThemeProvider>
+  </CacheProvider>
+);
+
+export default App;
